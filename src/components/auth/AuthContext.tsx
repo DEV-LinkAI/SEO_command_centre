@@ -23,6 +23,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Hard-disable auth flow for deployment stability
+  useEffect(() => {
+    // Minimal, safe default profile; no secrets stored
+    const demo: UserProfile = {
+      id: 'local-user',
+      email: 'user@local',
+      name: 'Gebruiker',
+      company_id: 'demo-company',
+      role: 'user',
+    }
+    authApi.setUserProfile(demo)
+    setUser(null)
+    setSession(null)
+    setUserProfile(demo)
+    setLoading(false)
+  }, [])
+
+  // NOTE: Original Supabase auth code kept below for future re-enable
+
   /**
    * Haal bedrijfsnaam op uit companies tabel
    */

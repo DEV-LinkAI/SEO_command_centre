@@ -62,7 +62,13 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
         try { sessionStorage.setItem(STORAGE_KEY, opts[0].id) } catch {}
       }
     } catch {
-      // noop
+      // Fallback stub
+      const stub = [{ id: 'oranje', name: 'OranjeDuurzaam.nl', domain: 'oranjeduurzaam.nl', status: 'Verbonden' }]
+      setWebsites(stub)
+      if (!websiteId) {
+        setWebsiteIdState(stub[0].id)
+        try { sessionStorage.setItem(STORAGE_KEY, stub[0].id) } catch {}
+      }
     } finally {
       setLoading(false)
     }
