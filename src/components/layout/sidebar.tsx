@@ -34,9 +34,13 @@ export function Sidebar({ companyId }: SidebarProps) {
     }
   }
 
-  // Build route for current or selected site
-  const withSite = (path: string) => `/s/${websiteId}${path}`
-  const siteReady = !!websiteId
+  // Navigation helper: ensure a siteId exists, then navigate
+  const defaultId = websiteId || websites[0]?.id || 'oranje'
+  const go = (path: string) => {
+    const id = websiteId || defaultId
+    if (!websiteId) setWebsiteId(id)
+    router.push(`/s/${id}${path}`)
+  }
 
   return (
     <div className="w-80 h-screen bg-white flex flex-col border-r border-gray-200 font-sans">
@@ -82,11 +86,11 @@ export function Sidebar({ companyId }: SidebarProps) {
             Menu
           </h3>
           <div className="space-y-1">
-            <SideBarIconLink icon={LayoutDashboard} tekst="Dashboard" href={siteReady ? withSite('/dashboard') : undefined} />
-            <SideBarIconLink icon={FileText} tekst="Content" href={siteReady ? withSite('/content') : undefined} />
-            <SideBarIconLink icon={Search} tekst="Zoekwoorden" href={siteReady ? withSite('/zoekwoorden') : undefined} />
-            <SideBarIconLink icon={LineChart} tekst="Prestatie" href={siteReady ? withSite('/prestatie') : undefined} />
-            <SideBarIconLink icon={PenSquare} tekst="Briefings" href={siteReady ? withSite('/briefings') : undefined} />
+            <SideBarIconLink icon={LayoutDashboard} tekst="Dashboard" onClick={() => go('/dashboard')} />
+            <SideBarIconLink icon={FileText} tekst="Content" onClick={() => go('/content')} />
+            <SideBarIconLink icon={Search} tekst="Zoekwoorden" onClick={() => go('/zoekwoorden')} />
+            <SideBarIconLink icon={LineChart} tekst="Prestatie" onClick={() => go('/prestatie')} />
+            <SideBarIconLink icon={PenSquare} tekst="Briefings" onClick={() => go('/briefings')} />
           </div>
         </div>
 
@@ -95,7 +99,7 @@ export function Sidebar({ companyId }: SidebarProps) {
       {/* Footer (Hulp & CTA) */}
       <div className="px-6 py-6 mt-auto border-t border-gray-200">
         <div className="space-y-1 mb-6">
-          <SideBarIconLink icon={Settings} tekst="Instellingen" href={siteReady ? withSite('/instellingen') : undefined} />
+          <SideBarIconLink icon={Settings} tekst="Instellingen" onClick={() => go('/instellingen')} />
           <SideBarIconLink 
             icon={Headphones} 
             tekst="Support" 
